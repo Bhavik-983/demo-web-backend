@@ -2,7 +2,7 @@ import { generateAccessToken } from "../helper/accessTokenHelper.js";
 import { errorHelper } from "../helper/errorHelper.js";
 import { UserModel } from "../models/user.schema.js";
 import messages from "../utilities/messages.js";
-import { sendBadRequest, sendBadRequestWith202, sendSuccess } from "../utilities/response/index.js";
+import { sendBadRequest, sendSuccess } from "../utilities/response/index.js";
 import bcrypt from 'bcrypt';
 
 export const Login = async (req, res) => {
@@ -30,7 +30,7 @@ export const Login = async (req, res) => {
 
 export const getProfile = async (req, res) => {
     try {
-        return sendSuccess(res, {...req.user}, messages.profileGetSuccessfully)
+        return sendSuccess(res, req.user, messages.profileGetSuccessfully)
     } catch (e) {
         return sendBadRequest(res, errorHelper(e, "GET_PROFILE"))
     }

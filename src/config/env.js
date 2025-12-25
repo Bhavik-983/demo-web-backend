@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+if (process.env.NODE_ENV !== "production") dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 export default {
   MONGO_URI: process.env.MONGO_URI,
@@ -18,4 +18,5 @@ export default {
 
   // jwt secret
   AUTH_SECRET: process.env.AUTH_SECRET,
+  PORT: process.env.PORT,
 };
