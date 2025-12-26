@@ -2,8 +2,8 @@ name: Deploy to EC2
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    
 
 jobs:
   deploy:
@@ -18,16 +18,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Test SSH Connection
-        run: |
-          echo "Testing SSH connection to ${{ secrets.EC2_HOST }}"
-          ssh -v -o StrictHostKeyChecking=no -o BatchMode=yes ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} 'echo "SSH connection successful!"'
-
       - name: Deploy to EC2
         run: |
-          ssh -v -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} \
-          "cd /var/www/node-app && \
-           git fetch origin && \
-           git reset --hard origin/main && \
-           npm install --production && \
-           pm2 restart all"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
+            cd /var/www/node-app
+            git fetch origin
+            git reset --hard origin/main
+            npm install --production
+            pm2 restart all
+          '
