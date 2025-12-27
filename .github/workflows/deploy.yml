@@ -23,12 +23,14 @@ jobs:
           echo "HOST=${{ secrets.EC2_HOST }}"
           echo "USER=${{ secrets.EC2_USERNAME }}"
 
+      
+
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no \
-          ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /var/www/node-app
-            git pull origin main
-            npm install --production
-            pm2 restart all
-          EOF
+            ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
+              cd /var/www/node-app
+              git pull origin main
+              npm install --production
+              pm2 restart all
+            EOF
