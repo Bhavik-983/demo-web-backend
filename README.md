@@ -211,7 +211,7 @@ now get default linux packages update  & upgrade the packages on EC2 instance
 
     }
 
-    CI-CD
+    CI-CD 
 
     step 1 : open your repository and going to the setting -> security -> secrets and variables -> actions
 
