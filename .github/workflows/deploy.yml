@@ -14,23 +14,21 @@ jobs:
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
-        
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Debug secrets
+      - name: Test SSH
         run: |
-          echo "HOST=${{ secrets.EC2_HOST }}"
-          echo "USER=${{ secrets.EC2_USERNAME }}"
+          ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} \
+          "whoami && hostname"
 
-      
-
-      - name: Deploy to EC2
+      - name: Deploy
         run: |
-            ssh -o StrictHostKeyChecking=no \
-            ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
-              cd /var/www/node-app
-              git pull origin main
-              npm install --production
-              pm2 restart all
-            EOF
+          ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /var/www/node-app
+            git pull origin main
+            npm install --production
+            pm2 restart all
+          EOF
