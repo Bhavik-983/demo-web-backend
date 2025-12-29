@@ -15,10 +15,10 @@ app.use(compression());
 
 app.use("/api",router)
 
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to the Demo Web Backend API" });
-} )
 
+app.get("/health", (_req, res) => {
+    res.json({ status: "OK", timestamp: new Date().toISOString() });
+});
 
 
 app.listen(dotenv.PORT, () => {
