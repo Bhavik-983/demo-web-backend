@@ -15,6 +15,10 @@ app.use(compression());
 
 app.use("/api",router)
 
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to the Demo Web Backend API" });
+} )
+
 
 
 app.listen(dotenv.PORT, () => {
