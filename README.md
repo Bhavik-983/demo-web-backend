@@ -221,3 +221,40 @@ now get default linux packages update  & upgrade the packages on EC2 instance
      EC2_USERNAME = 13.201.129.207 (public ip of ec2 instance)
      EC2_SSH_KEY = ssh key which is downloaded due create instance node-key.pem (open this file and copy that key and paste in secret value)
 
+
+
+
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Test SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} \
+          "whoami && hostname"
+
+      - name: Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /var/www/node-app
+            git pull origin main
+            npm install --production
+            pm2 restart all
+          EOF
